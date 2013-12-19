@@ -105,9 +105,9 @@ consist of the following fields:
     nonBase (list) : list of length M of indices of non-basic varaibles
     dual (bool) : indicates whether this problem is a dual form of the original problem
 
-Some of the seemingly superflous fields are used in solving an updated version
-of the original problem as the solver branches. An original problem should use
-the following default values:
+Some of the seemingly superflous fields are used to solve an updated version of
+the original problem as the solver branches. An original problem should use the
+following default values:
 
     z : 0.0
     base : range(0, N)
@@ -116,12 +116,12 @@ the following default values:
 
 ## Implementation
 As previously mentioned, this ILP solver was implemented in Python using MPI.
-The general approach was toe create a Master process, which is in charge of
+The general approach was to create a Master process, which is in charge of
 issuing LP problems to Worker processes and updating the current best integer
 solution. Each Worker then solves the relaxed LP problem and notifies the
 Master of the results.  If a non-integral solution was found, the worker will
 branch the LP problem on an non-integral value, send one branch back to the
-Master, and begins solving the other branch.  A simplified diagram of class
+Master, and begin solving the other branch.  A simplified diagram of class
 dependencies is shown below:
 
 ![Alt text](https://raw.github.com/mkaspr/ilp-solver/master/images/class_diagram.png)
@@ -137,12 +137,13 @@ speedup observed on the University of Colorado's JANUS supercomputer.
 ![Alt text](https://raw.github.com/mkaspr/ilp-solver/master/images/speedup.png)
 
 As we can see, the observed speedup is near linear. This is because each branch
-can be solved independently from one another. What prevents achieving perfect
-linear speedup is the communication overhead that results from having one
-Master process handle all communication among the Worker processes. We can also
-see that as the problem size increases the speedup improves. This is because the
-time it takes to solve each relaxed LP problem increases, thus making the
-communication overhead a smaller portion of the total runtime.
+can be solved independently from one another. What prevents the problem from
+achieving perfect linear speedup is the communication overhead that results
+from having one Master process handle all communication among the Worker
+processes. We can also see that as the problem size increases the speedup
+improves. This is because the time it takes to solve each relaxed LP problem
+increases, thus making the communication overhead a smaller portion of the
+total runtime.
 
 ## Future Work
 The following briefly describes current problems and areas where the program
@@ -158,22 +159,23 @@ communication functions.
 
 ##### Improve ETA File Usage
 The ETA file used inside `solver.py` could be altered to improve performance.
-Optinally, the GLPK LP solver could be used instead of the current Python
+Alternatively, the GLPK LP solver could be used instead of the current Python
 implementation.
 
 ##### Branch-and-Cut
-Using Branch-and-Cut instead of Branch-and-Bound would further reduce MPI
-communicatoin overhead, as Workers would search a given branch longer, without
-needing to send results back to the master after every solution.
+Using the Branch-and-Cut algorithm instead of Branch-and-Bound would further
+reduce MPI communication overhead, as Workers would search a given branch
+longer, without needing to send results back to the master after every
+solution.
 
 ##### Broadcasting Integer Solutions
 Currently, each Worker sends the results of non-integral solutions back to the
-Master, so the Master can inform the Worker if the that branch can be pruned.
+Master so the Master can inform the Worker if the that branch can be pruned.
 To reduce this communication, the Master could broadcast each new integer
 solution to each Worker, as these are relatively rare, so each worker can make
 the decision to prune themselves.
 
 ##### Reading AMPL Input Files
 As mentioned above, this program currently works on randomly generated problems.
-Providing an ampl file parser that creates `Problem` objects would beneficial
+Providing an ampl file parser that creates `Problem` objects would be beneficial
 for solving actual problems.
