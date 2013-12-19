@@ -124,7 +124,7 @@ branch the LP problem on an non-integral value, send one branch back to the
 Master, and begins solving the other branch.  A simplified diagram of class
 dependencies is shown below:
 
-![Alt text](https://raw.github.com/mkaspr/ilp_solver/master/images/class_diagram.png)
+![Alt text](https://raw.github.com/mkaspr/ilp-solver/master/images/class_diagram.png)
 
 ## Evaluation
 - ran on Janus
@@ -135,6 +135,8 @@ dependencies is shown below:
 - problem runtimes
 - results description
 - image
+
+![Alt text](https://raw.github.com/mkaspr/ilp-solver/master/images/speedup.png)
 
 ## Future Work
 The following briefly describes current problems and areas where the program
