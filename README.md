@@ -127,16 +127,22 @@ dependencies is shown below:
 ![Alt text](https://raw.github.com/mkaspr/ilp-solver/master/images/class_diagram.png)
 
 ## Evaluation
-- ran on Janus
-- branch runtimes
-- results description
-- image
-
-- problem runtimes
-- results description
-- image
+To evaluate the ILP solver, I timed how long it took to solve 2,000 branches
+with a different number of cores, ranging from 1 to 80.  Additionally, three
+different problems sizes were used to compare performance as the problem size
+increases. For each problem size, three different problems were used and five
+trials were run to compute an average runtime. The graph below shows the
+speedup observed on the University of Colorado's JANUS supercomputer.
 
 ![Alt text](https://raw.github.com/mkaspr/ilp-solver/master/images/speedup.png)
+
+As we can see, the observed speedup is near linear. This is because each branch
+can be solved independently from one another. What prevents achieving perfect
+linear speedup is the communication overhead that results from having one
+Master process handle all communication among the Worker processes. We can also
+see that as the problem size increases the speedup improves. This is because the
+time it takes to solve each relaxed LP problem increases, thus making the
+communication overhead a smaller portion of the total runtime.
 
 ## Future Work
 The following briefly describes current problems and areas where the program
